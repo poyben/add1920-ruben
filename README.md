@@ -7,3 +7,11 @@ Trabajos de ADD
 Si la velocidad me mata, que nadie llore, estaba sonriendo.
 
 > Velocidad= distancia/tiempo
+
+Ojalá me mate de una vez:
+
+```
+git clone
+
+```
+![imagen_alexelcapo](img/alex.jpg)
