@@ -6,4 +6,4 @@ Trabajos de ADD
 
 Si la velocidad me mata, que nadie llore, estaba sonriendo.
 
-> La velocidad es el resultado de la distancia partida por el tiempo.
+> Velocidad= distancia/tiempo
