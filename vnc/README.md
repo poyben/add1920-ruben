@@ -2,8 +2,8 @@
 
 * Comprobacion Windows
 
-![](img/2_1.png)
+![](img/netstat.png)
 
 * Comprobacion Linux
 
-![](img/4_1.png)
+![](img/lsof.png)
