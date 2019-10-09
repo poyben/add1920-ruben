@@ -121,3 +121,56 @@ Si hemos llegado hasta aquí, deberían funcionar el resto de conexiones.
 Confirmar que existen los siguientes ficheros en */etc/ssh*, Los ficheros *ssh_host*key* y *ssh_host*key.pub*, son ficheros de clave pública/privada que identifican a nuestro servidor frente a nuestros clientes:
 
 ![clavesssh](img/27clavesssh.png)
+
+Modificamos el fichero de configuración **SSH** *(/etc/ssh/sshd_config)* para añadir la línea *Hostkey /etc/ssh/ssh_host_rsa_key*. También comentar el resto de líneas (usando **#**) con configuración HostKey. Este parámetro define los ficheros de clave publica/privada que van a identificar a nuestro servidor. Con este cambio decimos que sólo vamos a usar las claves del tipo RSA.
+
+![cambiamosfichero](img/28modificarficheroclaves.png)
+
+## Regenerar cartificados
+
+Ahora, en la máquina **ssh-serverXXg**, cambiaremos o volveremos  generar nuevas claves públicas/privadas para la identificación de nuestro servidor.
+
+>Usar comando *ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key*.
+
+![comando keygen](img/29keygen.png)
+
+Reiniciamos el servicio SSH usando el comando *systemctl restart sshd* y comprobamos que el servicio está activo con el comando *systemctl status sshd*.
+
+![servicio ssh1](img/30serviciosshd.png)
+
+## Comprobamos
+
+Comprobamos qué es lo que sucede cuando volvemos a intentar conectarnos desde los dos clientes **primer-apellido2** y **primer-apellido1**.
+
+Da error.
+
+![fallo](img/31fallo.png)
+
+>Para solucionar el error, debemos leer el mensaje que nos ha salido al ejecutar el comando, ahí está todo lo necesario.
+
+Una vez arreglado, nos podremos conectar.
+
+![arreglo de conexión](img/32arregloconexion.png)
+
+## Personalización del prompt cambiamosfichero
+
+Podremos personalizarlo añadiendo las siguientes líneas al fichero de configuración del usuario **primer-apellido1** en la máquina sevidor *ssh-serverXXg*.
+
+>Fichero a editar: */home/primer-apellido1/.bashrc*.
+
+Añadimos las siguientes líneas:
+```
+# Se cambia el prompt al conectarse vía SSH
+
+if [ -n "$SSH_CLIENT" ]; then
+   PS1="AccesoRemoto_\e[32m\u@\h:\e[0m \w\a\$ "
+else
+   PS1="\[$(pwd)\]\u@\h:\w>"
+fi
+```
+
+![fichero modificado](img/33modificarprompt.png)
+
+Tambien podemos crear el siguiente fichero para crear alias y así poder ejecutar comandos de una forma más sencilla y cómoda como si fueran "comados atajo".
+
+![alias](img/34alias.png)
