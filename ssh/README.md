@@ -1,5 +1,5 @@
-# Servidor SSH
-## Preparativos en Servidor OpenSUSE
+# **1. Servidor SSH**
+## 1.1 Preparativos en Servidor OpenSUSE
 Para empezar esta actividad, configuraremos una máquina OpenSUSE que va a actuar como servidor.
 Le asignamos el nombre **ssh-serverXXg**, ponemos la contraseña que deseemos al usuario *root* y por último, añadimos en el fichero */etc/hosts* a los usuarios *ssh-clientXXg* (que será una máquina OpenSUSE que actuará como ciente) y *ssh-clientXXw* (que será una máquina Windows que actuará tambien como cliente).
 
@@ -14,7 +14,7 @@ Para comprobar que hemos configurado esta máquina ejecutaremos los siguientes c
 
 ![comprobacion2](img/3iproute.png)
 
-![comprobacion3](img/4pingyhost.png)
+![comxrobacion3](img/4pingyhost.png)
 
 ![comprobacion4](img/5pingclienteg.png)
 
@@ -36,7 +36,7 @@ A continuación crearemos los siguientes usuarios en la máquina en la que nos e
 
 ![añadir usuarios](img/9creacionusuarios.png)
 
-## Preparativos en Cliente OpenSUSE
+## 1.2 Preparativos en Cliente GNU/Linux
 
 Configuramos este cliente GNU/Linux asignándole el nombre "*ssh-clientXXg*" y añadiendo en su archivo **/etc/hosts** al equipo *ssh-serverXXg* y al equipo *ssh-clientXXw*.
 
@@ -48,7 +48,7 @@ Para comprobar que hay conexión entre las máquinas podemos usar el comando *pi
 
 ![ping2](img/12pingclientw.png)
 
-## Preparativos en Cliente Windows
+## 1.3 Preparativos en Cliente Windows
 
 Primero debemos instalar el software cliente SSH en esta máquina Windows, como en este caso, **PuTTY**.
 
@@ -60,7 +60,7 @@ Luego, le asignaremos el nombre a la máquina: *ssh-clientXXw* y añadiremos las
 
 En esta máquina también podremos hacer **ping** para comprobar las conexiones.
 
-## Instalación del Servicio SSH
+# **2. Instalación del Servicio SSH**
 
 Para instalar el servicio SSH en la máquina de OpenSUSE que usaremos como servidor, podremos instalarlo por entorno gráfico o por comandos.
 
@@ -70,6 +70,7 @@ Para descargarlo por entorno gráfico tenemos que abrir la herramienta *yast*, s
 
 Por comandos tendriamos que ejecutar *zypper install openssh*.
 
+## 2.1 Comprobación
 Cuando lo hayamos instalado y querramos saber si el servicio está activo, ejecutaremos en el terminal el comando **systemctl status sshd**.
 
 ![statusssh](img/17statusssh.png)
@@ -78,7 +79,7 @@ En caso de que no esté activo, lo podremos activar usando el comando **systemct
 
 Ejecutamos el comando *sudo lsof -i:22 -n* para comprobar que el servicio está escuchando por el puerto 22.
 
-## Primera coneción SSH desde el cliente GNU/Linux
+## 2.2 Primera conexión SSH desde el cliente GNU/Linux
 
 Vamos al cliente de OpenSUSE (máquina *ssh-clientXXg*).
 
@@ -103,7 +104,7 @@ Ahora comprobaremos que funcionan correctamente las conexiones SSH desde el clie
 
 ![conexiones](img/25conexionesglez.png)
 
-## Primera conexión desde cliente Windows
+## 2.3 Primera conexión desde cliente Windows
 
 Nos conectamos usando **PuTTY**.
 
@@ -114,9 +115,9 @@ Nos conectamos usando **PuTTY**.
 
 Si hemos llegado hasta aquí, deberían funcionar el resto de conexiones.
 
-![puttysuseserver](img/26.2puttyserverg.png)
+![puttysuserserver](img/26.2puttyserverg.png)
 
-## Cambiamos la identidad del servidor
+# **3. Cambiamos la identidad del servidor**
 
 Confirmar que existen los siguientes ficheros en */etc/ssh*, Los ficheros *ssh_host*key* y *ssh_host*key.pub*, son ficheros de clave pública/privada que identifican a nuestro servidor frente a nuestros clientes:
 
@@ -126,7 +127,7 @@ Modificamos el fichero de configuración **SSH** *(/etc/ssh/sshd_config)* para a
 
 ![cambiamosfichero](img/28modificarficheroclaves.png)
 
-## Regenerar cartificados
+## 3.1 Regenerar cartificados
 
 Ahora, en la máquina **ssh-serverXXg**, cambiaremos o volveremos  generar nuevas claves públicas/privadas para la identificación de nuestro servidor.
 
@@ -138,7 +139,7 @@ Reiniciamos el servicio SSH usando el comando *systemctl restart sshd* y comprob
 
 ![servicio ssh1](img/30serviciosshd.png)
 
-## Comprobamos
+## 3.2 Comprobamos
 
 Comprobamos qué es lo que sucede cuando volvemos a intentar conectarnos desde los dos clientes **primer-apellido2** y **primer-apellido1**.
 
@@ -152,7 +153,7 @@ Una vez arreglado, nos podremos conectar.
 
 ![arreglo de conexión](img/32arregloconexion.png)
 
-## Personalización del prompt cambiamosfichero
+# **4. Personalización del prompt Bash**
 
 Podremos personalizarlo añadiendo las siguientes líneas al fichero de configuración del usuario **primer-apellido1** en la máquina sevidor *ssh-serverXXg*.
 
@@ -174,3 +175,94 @@ fi
 Tambien podemos crear el siguiente fichero para crear alias y así poder ejecutar comandos de una forma más sencilla y cómoda como si fueran "comados atajo".
 
 ![alias](img/34alias.png)
+
+Comprobamos que las conexiones SSH funcionan.
+
+![comprob](img/35postalias.png)
+
+Y también funcionan los alias que hemos asignaso a los comandos tanto en las máquinas OpenSUSE como en la Windows.
+
+![comproalias](img/36comprobacionaalias.png)
+
+![comproalias](img/37igualw.png)
+
+# **5. Autenticación mediante claves públicas**
+
+En la máquina cliente de OpenSUSE (*ssh-clientXXg*), iniciamos sesión como nuestro **usuario normal** y ejecutamos el comando *ssh-keygen -t rsa* para generar un nuevo par de claves para el usuario en:
+
+  * /home/nombre-alumno/.ssh/id_rsa
+  * /home/nombre-alumno/.ssh/id_rsa.pub
+
+![keygencli](img/38keygencliente.png)
+
+Ahora vamos a copiar la clave pública (*id_rsa.pub*), al fichero "*authorized_keys*" del usuario remoto **primer-apellido4** que está definido en el servidor.
+
+>Para ello podremos usar el comando *ssh-copy-id primer-apellido4@ssh-serverXXg*.
+
+![copiaclave](img/39copiarkey.png)
+
+Podemos comprobar que desde la máquina *ssh-clientXXg*, **NO** se pide password, mientras que en la máquina *ssh-clientXXw* **SI** se pide.
+
+![no passw](img/40glez4sinpassword.png)
+
+![si passw](img/41glezconpassword.png)
+
+# **6. Uso de SSH como túnel para X**
+
+En la máquina OpenSUSE que usamos como servidor, instalamos una aplicación de entorno gráfico.
+
+>En mi caso desintalo el Geany de la máquina cliente para así tenerla solo en la máquina servidor.
+
+Modificaremos el servidor SSH para permitir la ejecución de aplicaciones gráficas, desde los clientes.
+
+Para ello, nos dirigimos al fichero de configuración */etc/ssh/sshd_config* (Opción *X11Forwarding yes* **OJO**, sin poner la almohadilla).
+
+![forwarding](img/42forwardingyes.png)
+
+Y recargamos el servicio SSH para que se guarden los cambios de configuración.
+
+Ahora vamos a la máquina cliente de OpenSUSE.
+
+Ejecutamos el comando *zypper se NOMBRE-DE-APLICACION*, para comprobar que dicha aplicación no está instalada.
+
+![zypperse](img/43zypperse.png)
+
+Desde esta misma máquina, vamos a comprobar que funciona la aplicación del servidor por vía remota:
+
+Ejecutamos el comando *ssh -X primer-apellido1@ssh-serverXXg* y ejecutamos la aplicación.
+
+![geany](img/44geanyremoto.png)
+
+# **7. Aplicaciones Windows nativas**
+
+Instalaremos el emulador *Wine* en el *ssh-serverXXg*.
+
+![wine](img/45wine.png)
+
+Ahora podemos instalar alguna aplicación de Windows en el servidor SSH usando este emulador. O también podemos usar el Block de Notas que viene con el Wine: **wine notepad**.
+
+Comprobar que la plicación funciona correctamente en las máquinas OpenSUSE.
+
+![winepad](img/46winepad.png)
+
+# **8.Restricciones de uso**
+
+Vamos a modificar los usuarios del servidor SSH para añadir algunas restricciones de uso del servicio.
+
+## 8.1 Restricción sobre un usuario
+
+Vamos a crear una restricción de uso del SSH para un usuario, por ejemplo el usuario *primer-apellido2*.
+
+Modificamos el fichero de configuración del servidor SSH (*/etc/ssh/sshd_config*) para restringir el acceso al usuario. Consultamos las opciones *AllowUsers* y *DenyUsers*, pero como solo vamos a bloquear el acceso a un usuario, solo modificaremosla segunda opción.
+
+![deny](img/48denyusers.png.png)
+
+Comprobamos que no se puede acceder al servicio SSH con el usuario *primer-apellido2*.
+
+![comp](img/49nologin.png)
+
+## 8.2 Restricción sobre una aplicación
+
+Primero crearemos un grupo de usuarios al que llamaremos **remoteapps** y metemos en ese grupo al usuario *primer-apellido4*.
+
+Ponemos al programa que queramos el grupo propietario *remoteapps* y le asignamos los permisos del ejecutable del programa a 750. De esta forma, los usuarios que no pertenezcan a este grupo no podrán ejecutar el programa.
