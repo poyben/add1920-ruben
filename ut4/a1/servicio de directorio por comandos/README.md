@@ -14,4 +14,8 @@
 
 ![img4](./img/25clientesearch.png)
 
->(El comando muestra más contenido del que aparece en la captura, enseñando los otros 3 usuarios creados.)
+![img5](./img/26.png)
+
+![img6](./img/27.png)
+
+![img7](./img/28.png)
