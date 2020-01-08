@@ -1,0 +1,2 @@
+tree:install
+nano:remove
